@@ -18,8 +18,6 @@ app.use(express.json());
 // backend/app.js
 const routes = require("./routes");
 
-app.use(routes); // Connect all the routes
-
 // Security Middleware
 if (!isProduction) {
   // enable cors only in development
@@ -43,5 +41,7 @@ app.use(
     },
   })
 );
+
+app.use(routes); // Connect all the routes
 
 module.exports = app;
