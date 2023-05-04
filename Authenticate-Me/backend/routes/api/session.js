@@ -27,6 +27,12 @@ router.post("/", async (req, res, next) => {
   });
 });
 
+// Log out
+router.delete("/", (_req, res) => {
+  res.clearCookie("token");
+  return res.json({ message: "success" });
+});
+
 module.exports = router;
 
 /*
@@ -58,5 +64,14 @@ fetch('/api/session', {
     "XSRF-TOKEN": "QdSwatKo-5xywzWiSLZ_7KGx7Kur0TFgntC0"
   },
   body: JSON.stringify({ credential: 'Demo-lition', password: 'Hello World!' })
+}).then(res => res.json()).then(data => console.log(data));
+
+// to test logout
+fetch('/api/session', {
+  method: 'DELETE',
+  headers: {
+    "Content-Type": "application/json",
+    "XSRF-TOKEN": "QbooIDsd-Afb3QZPRYCJHxdpF2BH1AbZRlJo"
+  }
 }).then(res => res.json()).then(data => console.log(data));
 */
