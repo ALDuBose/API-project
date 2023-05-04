@@ -20,7 +20,10 @@ router.post('/test', (req, res) => {
 module.exports = router;
 
 
+/*
+// npx sequelize-cli model:generate --name Users --attributes id:INTEGER,firstName:STRING,lastName:STRING,email:STRING,userName:STRING
 
+*/
 
 
 

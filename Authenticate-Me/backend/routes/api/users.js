@@ -54,9 +54,6 @@ fetch('/api/users', {
   })
 }).then(res => res.json()).then(data => console.log(data));
 
-
-
-
 fetch('/api/users', {
   method: 'POST',
   headers: {

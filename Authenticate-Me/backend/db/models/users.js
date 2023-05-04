@@ -44,7 +44,6 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
       // define association here
-
     }
   }
 
@@ -61,6 +60,12 @@ module.exports = (sequelize, DataTypes) => {
             }
           },
         },
+      },
+      firstName: {
+        type: DataTypes.STRING,
+      },
+      lastName: {
+        allowNull: false,
       },
       email: {
         type: DataTypes.STRING,
