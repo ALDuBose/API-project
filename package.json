@@ -1,9 +1,8 @@
 {
-  "name": "authenticate-me",
+  "name": "api-project",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "install": "npm --prefix backend install backend",
     "dev:backend": "npm install --prefix backend start",
     "sequelize": "npm run --prefix backend sequelize",
@@ -14,5 +13,13 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "Airbnb Clone for pies and places",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ALDuBose/API-project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ALDuBose/API-project/issues"
+  },
+  "homepage": "https://github.com/ALDuBose/API-project#readme"
 }
