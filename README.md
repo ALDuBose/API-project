@@ -5,7 +5,7 @@ Airbnb Clone
 
 ## Database Schema Design
 
-`<insert database schema design here>`
+<img width="742" alt="airbnb_dbdiagram" src="https://user-images.githubusercontent.com/105375787/236480864-b0d64c51-0fc9-4e66-b01b-6bc3d48a554a.png">
 
 ## API Documentation
 
