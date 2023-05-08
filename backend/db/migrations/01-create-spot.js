@@ -22,11 +22,11 @@ module.exports = {
           allowNull: false,
         },
         address: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.STRING,
           allowNull: false,
         },
         city: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.STRING,
           allowNull: false,
         },
         country: {
@@ -34,7 +34,7 @@ module.exports = {
           allowNull: false,
         },
         lat: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.STRING,
           allowNull: false,
         },
         lng: {
