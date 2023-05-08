@@ -38,14 +38,6 @@ module.exports = (sequelize, DataTypes) => {
       country: {
         type: DataTypes.STRING,
       },
-      lat: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      lng: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -54,8 +46,16 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      lat: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      lng: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       price: {
-        type: DataTypes.DECIMAL(10,2),
+        type: DataTypes.DECIMAL(10, 2),
       },
     },
     {

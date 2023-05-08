@@ -12,7 +12,8 @@ const reviewData = [
   {
     spotId: 2,
     userId: 2,
-    review: "Added so much salt and pepper Gordon Ramsay could hear the dish singing -Push It!",
+    review:
+      "Added so much salt and pepper Gordon Ramsay could hear the dish singing -Push It!",
     stars: 3,
   },
   {
@@ -28,7 +29,13 @@ const reviewData = [
       "It was so disturbing I took a picture and sent it to a friend, who responded, ‘That looks malignant’.",
     stars: 0,
   },
-  { spotId: 5, userId: 5, review: "I never, ever, ever, ever, ever ate something I liked . . . as little as this", stars: 0 },
+  {
+    spotId: 5,
+    userId: 5,
+    review:
+      "I never, ever, ever, ever, ever ate something I liked . . . as little as this",
+    stars: 0,
+  },
 ];
 
 let options = {};
