@@ -3,11 +3,11 @@
 /** @type {import('sequelize-cli').Migration} */
 
 const reviewImageData = [
-  {reviewed: 1, url: "Image1.url"},
-  {reviewed: 2, url: "Image2.url"},
-  {reviewed: 3, url: "Image3.url"},
-  {reviewed: 4, url: "Image4.url"},
-  {reviewed: 5, url: "Image5.url"}
+  {reviewId: 1, url: "Image1.url"},
+  {reviewId: 2, url: "Image2.url"},
+  {reviewId: 3, url: "Image3.url"},
+  {reviewId: 4, url: "Image4.url"},
+  {reviewId: 5, url: "Image5.url"}
 ];
 
 let options = {};
