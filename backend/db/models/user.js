@@ -1,5 +1,5 @@
 "use strict";
-const { Model, Validator } = require('sequelize');
+const { Model, Validator } = require("sequelize");
 const bcrypt = require("bcryptjs");
 
 module.exports = (sequelize, DataTypes) => {
@@ -43,7 +43,9 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     static associate(models) {
-      // define association here
+      User.hasMany(models.Sport, {foreignKey: "ownerId", onDelete: "CASCADE", hooks:true}),
+      User.hasMany(models.Booking, {foreignKey: "userId", onDelete: "CASCADE", hooks:true}),
+      User.hasMany(models.Review, {foreignKey: "userId", onDelete: "CASCADE", hooks: true})
     }
   }
   User.init(
