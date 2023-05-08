@@ -1,7 +1,7 @@
 # API-project
 Airbnb Clone for pies and places
 
-# Airpnp 
+# Mcbnb 
 
 ## Database Schema Design
 
