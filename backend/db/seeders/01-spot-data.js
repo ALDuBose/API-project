@@ -23,7 +23,7 @@ const spotData = [
     lat: 37.746384,
     lng: -94.934525,
     name: "McBrunchin",
-    description: " It's a good time for the great taste of McDonald's",
+    description: "It's a good time for the great taste of McDonald's.",
     price: 2.99,
   },
   {
@@ -34,7 +34,7 @@ const spotData = [
     lat: 38.746384,
     lng: -93.934525,
     name: "McCation",
-    description: " I'm lovin' it ",
+    description: " I'm lovin' it!",
     price: 300.99,
   },
   {
@@ -56,7 +56,7 @@ const spotData = [
     lat: 40.746384,
     lng: -96.934525,
     name: "McFoodie",
-    description: "What we're made of ",
+    description: "What we're made of.",
     price: 50.99,
   },
 ];
