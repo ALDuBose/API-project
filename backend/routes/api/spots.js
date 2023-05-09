@@ -27,6 +27,37 @@ const validateSpot = [
   handleValidationErrors,
 ];
 
+router.get("/current", async (req, res, next) => {
+  const { user } = req;
+  let updatedSpotData = [];
+  const spotData = await Spot.findAll({
+    where: { ownerId: user.id },
+    include: [
+      { model: Review, attributes: ["stars"] },
+      { model: SpotImage, attributes: { exclude: ["createdAt", "updatedAt"] } },
+    ],
+  });
+
+  for (let key in spotData) {
+    let currSpot = spotData[key].toJSON();
+
+    let currReview = currSpot.Reviews.reduce((acc, obj) => {
+      return (acc += obj.stars);
+    }, 0);
+    currReview
+      ? (currSpot.avgRating = currReview / currSpot.Reviews.length)
+      : (currSpot.avgRating = null);
+    delete currSpot.Reviews;
+    currSpot.SpotImages[0]
+      ? (currSpot.previewImage = currSpot.SpotImages[0].url)
+      : (currSpot.previewImage = null);
+    delete currSpot.SpotImages;
+    updatedSpotData.push(currSpot);
+  }
+
+  return res.status(200).json(updatedSpotData);
+});
+
 router.get("/", async (req, res, next) => {
   let updatedSpotData = [];
   const spotData = await Spot.findAll({
