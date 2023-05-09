@@ -46,10 +46,8 @@ router.get("/", async (req, res, next) => {
       ? (currSpot.avgRating = currReview / currSpot.Reviews.length)
       : (currSpot.avgRating = null);
     delete currSpot.Reviews;
-
-    let currImage = currSpot.SpotImages[0].url;
-    currImage
-      ? (currSpot.previewImage = currImage)
+    currSpot.SpotImages[0]
+      ? (currSpot.previewImage = currSpot.SpotImages[0].url)
       : (currSpot.previewImage = null);
     delete currSpot.SpotImages;
     updatedSpotData.push(currSpot);
@@ -78,5 +76,34 @@ router.post("/", requireAuth, async (req, res, next) => {
   if (newSpot.lat < 0) errObj["lat"] = { message: "Latitude is not valid." };
   if (newSpot.lng > 0) errObj["lng"] = { message: "Longitude is not valid" };
   !errObj ? res.status(400).json(errObj) : res.status(201).json(newSpot);
+});
+
+router.post("/:spotId/images", requireAuth, async (req, res, next) => {
+  const { user } = req;
+  const { spotId } = req.params;
+  const { url, preview } = req.body;
+  let result = {};
+
+  const spotData = await Spot.findOne({ where: { id: spotId } });
+
+  if (!spotData)
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+    });
+  if (user.id !== spotData.ownerId)
+    return res.status(403).json({
+      message: "Forbidden",
+    });
+
+  const newSpotImage = await SpotImage.create({
+    spotId,
+    url,
+    preview,
+  });
+
+  result["id"] = newSpotImage.id;
+  result["url"] = newSpotImage.url;
+  result["preview"] = newSpotImage.preview;
+  return res.status(200).json(result);
 });
 module.exports = router;
