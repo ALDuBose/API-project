@@ -47,12 +47,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       lat: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false
       },
       lng: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false
       },
       price: {
         type: DataTypes.DECIMAL(10, 2),
