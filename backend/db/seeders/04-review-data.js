@@ -23,7 +23,7 @@ const reviewData = [
     stars: 1,
   },
   {
-    spotId: 4,
+    spotId: 1,
     userId: 4,
     review:
       "It was so disturbing I took a picture and sent it to a friend, who responded, ‘That looks malignant’.",
@@ -34,7 +34,7 @@ const reviewData = [
     userId: 5,
     review:
       "I never, ever, ever, ever, ever ate something I liked . . . as little as this",
-    stars: 0,
+    stars: 2,
   },
 ];
 

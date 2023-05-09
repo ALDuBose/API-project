@@ -1,51 +1,32 @@
 // backend/routes/api/index.js
-const router = require('express').Router();
-const sessionRouter = require('./session.js');
-const usersRouter = require('./users.js');
+const router = require("express").Router();
+const sessionRouter = require("./session.js");
+const usersRouter = require("./users.js");
+const spotsRouter = require("./spots.js");
+const spotImagesRouter = require("./spotImages.js");
+const bookingsRouter = require("./bookings.js");
+const reviewsRouter = require("./reviews.js");
+const reviewImagesRouter = require("./reviewImages.js");
 const { restoreUser } = require("../../utils/auth.js");
 
 // Connect restoreUser middleware to the API router
-  // If current user session is valid, set req.user to the user in the database
-  // If current user session is not valid, set req.user to null
+// If current user session is valid, set req.user to the user in the database
+// If current user session is not valid, set req.user to null
 router.use(restoreUser);
 
-router.use('/session', sessionRouter);
+router.use("/session", sessionRouter);
+router.use("/users", usersRouter);
+router.use("/spots", spotsRouter);
+router.use("/spotImages", spotImagesRouter);
+router.use("/bookings", bookingsRouter);
+router.use("/reviews", reviewsRouter);
+router.use("/reviewImages", reviewImagesRouter);
 
-router.use('/users', usersRouter);
-
-router.post('/test', (req, res) => {
+router.post("/test", (req, res) => {
   res.json({ requestBody: req.body });
 });
 
 module.exports = router;
-
-
-/*
-// npx sequelize-cli model:generate --name Users --attributes id:INTEGER,firstName:STRING,lastName:STRING,email:STRING,userName:STRING
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // testing code below:
 // router.post("/test", (req, res) => {
