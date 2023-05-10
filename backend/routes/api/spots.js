@@ -17,8 +17,6 @@ const {
 
 const router = express.Router();
 
-
-
 router.get("/current", requireAuth, async (req, res, next) => {
   const { user } = req;
   let updatedSpotData = [];
