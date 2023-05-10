@@ -17,6 +17,39 @@ const {
 
 const router = express.Router();
 
+
+
+router.get("/current", requireAuth, async (req, res, next) => {
+  const { user } = req;
+  let updatedSpotData = [];
+  const spotData = await Spot.findAll({
+    where: { ownerId: user.id },
+    include: [
+      { model: Review, attributes: ["stars"] },
+      { model: SpotImage, attributes: { exclude: ["createdAt", "updatedAt"] } },
+    ],
+  });
+
+  for (let key in spotData) {
+    let currSpot = spotData[key].toJSON();
+
+    let currReview = currSpot.Reviews.reduce((acc, obj) => {
+      return (acc += obj.stars);
+    }, 0);
+    currReview
+      ? (currSpot.avgRating = currReview / currSpot.Reviews.length)
+      : (currSpot.avgRating = null);
+    delete currSpot.Reviews;
+    currSpot.SpotImages[0]
+      ? (currSpot.previewImage = currSpot.SpotImages[0].url)
+      : (currSpot.previewImage = null);
+    delete currSpot.SpotImages;
+    updatedSpotData.push(currSpot);
+  }
+
+  return res.status(200).json(updatedSpotData);
+});
+
 router.get("/:spotId", async (req, res, next) => {
   const { spotId } = req.params;
   let updatedSpotData = [];
@@ -27,7 +60,7 @@ router.get("/:spotId", async (req, res, next) => {
       include: [
         [
           sequelize.literal(
-            "(SELECT COUNT(*) FROM `Reviews` WHERE `Reviews`.`review` )"
+            "(SELECT COUNT(*) FROM `Reviews` WHERE `Reviews`.`review` AND `Reviews`.`spotId` = `Spot`.`id`)"
           ),
           "numReviews",
         ],
@@ -75,37 +108,6 @@ router.get("/:spotId", async (req, res, next) => {
 
     updatedSpotData.push(currSpot);
   }
-  return res.status(200).json(updatedSpotData);
-});
-
-router.get("/current", async (req, res, next) => {
-  const { user } = req;
-  let updatedSpotData = [];
-  const spotData = await Spot.findAll({
-    where: { ownerId: user.id },
-    include: [
-      { model: Review, attributes: ["stars"] },
-      { model: SpotImage, attributes: { exclude: ["createdAt", "updatedAt"] } },
-    ],
-  });
-
-  for (let key in spotData) {
-    let currSpot = spotData[key].toJSON();
-
-    let currReview = currSpot.Reviews.reduce((acc, obj) => {
-      return (acc += obj.stars);
-    }, 0);
-    currReview
-      ? (currSpot.avgRating = currReview / currSpot.Reviews.length)
-      : (currSpot.avgRating = null);
-    delete currSpot.Reviews;
-    currSpot.SpotImages[0]
-      ? (currSpot.previewImage = currSpot.SpotImages[0].url)
-      : (currSpot.previewImage = null);
-    delete currSpot.SpotImages;
-    updatedSpotData.push(currSpot);
-  }
-
   return res.status(200).json(updatedSpotData);
 });
 
@@ -191,18 +193,10 @@ router.post("/", requireAuth, validateSpot, async (req, res, next) => {
 
 router.put("/:spotId", requireAuth, validateSpot, async (req, res, next) => {
   const { spotId } = req.params;
-  const {
-    address,
-    city,
-    state,
-    country,
-    name,
-    description,
-    lat,
-    lng,
-    price,
-  } = req.body;
+  const { address, city, state, country, name, description, lat, lng, price } =
+    req.body;
   const { user } = req;
+
   const spotData = await Spot.findOne({
     where: { id: spotId },
     include: [{ model: Booking, attributes: [] }],
@@ -217,18 +211,16 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res, next) => {
       message: "Forbidden",
     });
 
-
-  spotData.address = address
-  spotData.city = city
-  spotData.state = state
-  spotData.country = country
-  spotData.name = name
-  spotData.description = description
-  spotData.lat = lat
-  spotData.lng = lng
-  spotData.price = price
-  await spotData.save()
-
+  spotData.address = address;
+  spotData.city = city;
+  spotData.state = state;
+  spotData.country = country;
+  spotData.name = name;
+  spotData.description = description;
+  spotData.lat = lat;
+  spotData.lng = lng;
+  spotData.price = price;
+  await spotData.save();
 
   return res.status(200).json(spotData);
 });
