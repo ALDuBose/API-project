@@ -53,19 +53,20 @@ router.get("/current", requireAuth, async (req, res, next) => {
 router.get("/:spotId", async (req, res, next) => {
   const { spotId } = req.params;
   let updatedSpotData = [];
+  let numReviews = 0;
 
   const spotData = await Spot.findAll({
     where: { id: spotId },
-    attributes: {
-      include: [
-        [
-          sequelize.literal(
-            "(SELECT COUNT(*) FROM Reviews WHERE Reviews.review AND Reviews.spotId = Spot.id)"
-          ),
-          "numReviews",
-        ],
-      ],
-    },
+    // attributes: {
+    //   include: [
+    //     [
+    //       sequelize.literal(
+    //         "(SELECT COUNT(*) FROM Reviews WHERE Reviews.review AND Reviews.spotId = Spot.id)"
+    //       ),
+    //       "numReviews",
+    //     ],
+    //   ],
+    // },
     include: [
       { model: Review },
       {
@@ -87,6 +88,8 @@ router.get("/:spotId", async (req, res, next) => {
     ],
   });
 
+
+
   if (!spotData)
     return res.status(404).json({
       message: "Spot couldn't be found",
@@ -96,8 +99,10 @@ router.get("/:spotId", async (req, res, next) => {
     let currSpot = spotData[key].toJSON();
 
     let currReview = currSpot.Reviews.reduce((acc, obj) => {
+      numReviews++;
       return (acc += obj.stars);
     }, 0);
+
     currReview
       ? (currSpot.avgRating = currReview / currSpot.Reviews.length)
       : (currSpot.avgRating = null);
@@ -105,9 +110,10 @@ router.get("/:spotId", async (req, res, next) => {
 
     currSpot.Owner = currSpot.User;
     delete currSpot.User;
-
+    currSpot["numReviews"] = numReviews
     updatedSpotData.push(currSpot);
   }
+
   return res.status(200).json(updatedSpotData);
 });
 
