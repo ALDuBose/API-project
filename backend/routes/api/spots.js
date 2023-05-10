@@ -60,7 +60,7 @@ router.get("/:spotId", async (req, res, next) => {
       include: [
         [
           sequelize.literal(
-            "(SELECT COUNT(*) FROM `Reviews` WHERE `Reviews`.`review` AND `Reviews`.`spotId` = `Spot`.`id`)"
+            "(SELECT COUNT(*) FROM Reviews WHERE Reviews.review AND Reviews.spotId = Spot.id)"
           ),
           "numReviews",
         ],
