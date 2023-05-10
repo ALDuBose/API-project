@@ -13,6 +13,7 @@ const {
 const {
   handleValidationErrors,
   validateSpot,
+  validateReview,
 } = require("../../utils/validation");
 
 const router = express.Router();
@@ -55,16 +56,6 @@ router.get("/:spotId", async (req, res, next) => {
 
   const spotData = await Spot.findAll({
     where: { id: spotId },
-    // attributes: {
-    //   include: [
-    //     [
-    //       sequelize.literal(
-    //         "(SELECT COUNT(*) FROM Reviews WHERE Reviews.review AND Reviews.spotId = Spot.id)"
-    //       ),
-    //       "numReviews",
-    //     ],
-    //   ],
-    // },
     include: [
       { model: Review },
       {
@@ -86,8 +77,6 @@ router.get("/:spotId", async (req, res, next) => {
     ],
   });
 
-
-
   if (!spotData)
     return res.status(404).json({
       message: "Spot couldn't be found",
@@ -108,7 +97,9 @@ router.get("/:spotId", async (req, res, next) => {
 
     currSpot.Owner = currSpot.User;
     delete currSpot.User;
-    currSpot["numReviews"] = numReviews
+
+    currSpot["numReviews"] = numReviews;
+
     updatedSpotData.push(currSpot);
   }
 
@@ -172,6 +163,43 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
   return res.status(200).json(result);
 });
 
+router.post(
+  "/:spotId/reviews",
+  requireAuth,
+  validateReview,
+  async (req, res, next) => {
+    const { spotId } = req.params;
+    const { user } = req;
+    const { review, stars } = req.body;
+
+    const spotData = await Spot.findAll({
+      where: { id: spotId },
+      include: [{ model: Review }],
+    });
+
+    if (!spotData) {
+      return res.status(404).json({ message: "Spot couldn't be found" });
+    }
+    if (spotData.Reviews) {
+      if (spotData.Reviews.includes(user.id))
+        return res.status(403).json({
+          message: "User already has a review for this spot",
+        });
+    }
+
+    const newReview = await Review.create({
+      userId: user.id,
+      spotId,
+      review,
+      stars,
+    });
+    if (typeof newReview.review !== "string")
+      return res.status(400).json({ review: "Review text is required" });
+
+    return res.status(200).json(newReview);
+  }
+);
+
 router.post("/", requireAuth, validateSpot, async (req, res, next) => {
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
@@ -228,4 +256,5 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res, next) => {
 
   return res.status(200).json(spotData);
 });
+
 module.exports = router;
