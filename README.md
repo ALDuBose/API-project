@@ -806,7 +806,7 @@ Create and return a new review for a spot specified by id.
     ```
 
 * Error response: Review from the current user already exists for the Spot
-  * Status Code: 500
+  * Status Code: 403
   * Headers:
     * Content-Type: application/json
   * Body:
