@@ -67,7 +67,7 @@ router.get("/:spotId", async (req, res, next) => {
       ],
     },
     include: [
-      { model: Review, attributes: ["stars"] },
+      { model: Review },
       {
         model: SpotImage,
         attributes: { exclude: ["createdAt", "updatedAt", "spotId"] },
