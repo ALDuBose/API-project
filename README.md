@@ -907,7 +907,6 @@ Update and return an existing review.
       "spotId": 1,
       "review": "This was an awesome spot!",
       "stars": 5,
-      "createdAt": "2021-11-19 20:39:36",
       "updatedAt": "2021-11-20 10:06:40"
     }
     ```
