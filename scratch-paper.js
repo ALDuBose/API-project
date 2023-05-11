@@ -13,5 +13,3 @@
 // npx sequelize-cli seed:generate --name booking-data
 // npx sequelize-cli seed:generate --name review-data
 // npx sequelize-cli seed:generate --name review-image-data
-
-Event.belongsTo(models.Venue, { foreignKey: "venueId" }),

@@ -7,6 +7,7 @@ const {
   Review,
   SpotImage,
   Booking,
+  ReviewImage,
   sequelize,
 } = require("../../db/models");
 
@@ -132,6 +133,27 @@ router.get("/", async (req, res, next) => {
     updatedSpotData.push(currSpot);
   }
   return res.status(200).json(updatedSpotData);
+});
+
+router.get("/:spotId/reviews", requireAuth, async (req, res, next) => {
+  const { spotId } = req.params;
+  const reviewData = await Review.unscoped().findAll({
+    where: { spotId },
+    include: [
+      { model: User, attributes: ["id", "firstName", "lastName"] },
+      { model: ReviewImage, attributes: ["id", "url"] },
+    ],
+  });
+  if (!reviewData)
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+    });
+
+  for (let key in reviewData) {
+    currObj = reviewData[key].toJSON();
+    console.log(currObj);
+  }
+  return res.status(200).json({ Reviews: reviewData });
 });
 
 router.post("/:spotId/images", requireAuth, async (req, res, next) => {
