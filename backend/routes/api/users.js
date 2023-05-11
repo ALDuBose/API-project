@@ -38,31 +38,3 @@ router.get("/", async (req, res, next) => {
 
 module.exports = router;
 
-/*
-//test signup
-fetch('/api/users', {
-  method: 'POST',
-  headers: {
-    "Content-Type": "application/json",
-    "XSRF-TOKEN": "sL9xDQHY-7vCeiZxFeOIGTV8_QrB8WyPu3Vs"
-  },
-  body: JSON.stringify({
-    email: 'spidey@spider.man',
-    username: 'Spidey',
-    password: 'password'
-  })
-}).then(res => res.json()).then(data => console.log(data));
-
-fetch('/api/users', {
-  method: 'POST',
-  headers: {
-    "Content-Type": "application/json",
-    "XSRF-TOKEN": "IsRGgJnS-6PceYdUB5S99SJjaPzpGp4kNRcA"
-  },
-  body: JSON.stringify({
-    email: 'firestar@spider.man',
-    username: 'Firestar',
-    password: ''
-  })
-}).then(res => res.json()).then(data => console.log(data));
-*/
