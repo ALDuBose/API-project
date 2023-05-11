@@ -35,12 +35,12 @@ router.get("/current", requireAuth, async (req, res, next) => {
 
   for (let key in reviewData) {
     let currObj = reviewData[key].toJSON();
-    console.log(user.id === currObj.Spot.ownerId)
+
     if (user.id === currObj.Spot.ownerId) {
-    currObj.ReviewImages.length
-      ? (currObj.Spot["previewImage"] = currObj.ReviewImages[0].url)
-      : (currObj.Spot["previewImage"] = null);
-    delete currObj.Spot.description
+      currObj.ReviewImages.length
+        ? (currObj.Spot["previewImage"] = currObj.ReviewImages[0].url)
+        : (currObj.Spot["previewImage"] = null);
+      delete currObj.Spot.description;
       result.Reviews.push(currObj);
     }
   }
