@@ -11,7 +11,10 @@ const {
   sequelize,
 } = require("../../db/models");
 
-const { handleValidationErrors } = require("../../utils/validation");
+const {
+  handleValidationErrors,
+  validateReview,
+} = require("../../utils/validation");
 
 const router = express.Router();
 
@@ -83,5 +86,40 @@ router.post("/:reviewId/images", requireAuth, async (req, res, next) => {
 
   return res.status(200).json(result);
 });
+
+router.put(
+  "/:reviewId",
+  requireAuth,
+  validateReview,
+  async (req, res, next) => {
+    const { reviewId } = req.params;
+    const { userId, review, stars } = req.body;
+    const { user } = req;
+
+    const reviewData = await Review.findOne({
+      where: { id: reviewId },
+    });
+
+    if (!reviewData)
+      return res.status(404).json({
+        message: "Review couldn't be found",
+      });
+
+    if (reviewData.userId !== user.id)
+      return res.status(403).json({
+        message: "Forbidden",
+      });
+
+
+    reviewData.reviewId = reviewId;
+    reviewData.userId = user.id;
+    reviewData.review = review;
+    reviewData.stars = stars;
+    await reviewData.save();
+    console.log(reviewData);
+
+    return res.status(200).json(reviewData);
+  }
+);
 
 module.exports = router;
