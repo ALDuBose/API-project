@@ -135,6 +135,7 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:spotId/reviews", requireAuth, async (req, res, next) => {
   const { spotId } = req.params;
+
   const reviewData = await Review.unscoped().findAll({
     where: { spotId },
     include: [
@@ -142,6 +143,7 @@ router.get("/:spotId/reviews", requireAuth, async (req, res, next) => {
       { model: ReviewImage, attributes: ["id", "url"] },
     ],
   });
+
   if (!reviewData)
     return res.status(404).json({
       message: "Spot couldn't be found",
@@ -241,11 +243,7 @@ router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
   // newBooking.endDate = moment(newBooking.endDate).format("MMMM Do YYYY");
   return res.status(200).json(newBooking);
 });
-router.post(
-  "/:spotId/reviews",
-  requireAuth,
-  validateReview,
-  async (req, res, next) => {
+router.post("/:spotId/reviews", requireAuth, validateReview, async (req, res, next) => {
     const { spotId } = req.params;
     const { user } = req;
     const { review, stars } = req.body;
@@ -255,7 +253,7 @@ router.post(
       include: [{ model: Review }],
     });
 
-    if (!spotData) {
+    if (!spotData.length) {
       return res.status(404).json({ message: "Spot couldn't be found" });
     }
     if (spotData.Reviews) {

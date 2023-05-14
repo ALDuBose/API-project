@@ -87,11 +87,7 @@ router.post("/:reviewId/images", requireAuth, async (req, res, next) => {
   return res.status(200).json(result);
 });
 
-router.put(
-  "/:reviewId",
-  requireAuth,
-  validateReview,
-  async (req, res, next) => {
+router.put("/:reviewId", requireAuth, validateReview, async (req, res, next) => {
     const { reviewId } = req.params;
     const { userId, review, stars } = req.body;
     const { user } = req;
