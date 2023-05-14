@@ -11,11 +11,9 @@ const {
   sequelize,
 } = require("../../db/models");
 
-const {
-  handleValidationErrors,
-  validateSpot,
-  validateReview,
-} = require("../../utils/validation");
+const { validateSpot, validateReview } = require("../../utils/validation");
+
+const moment = require("moment");
 
 const router = express.Router();
 
@@ -185,6 +183,64 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
   return res.status(200).json(result);
 });
 
+router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
+  const { spotId } = req.params;
+  const { user } = req;
+  let { userId, startDate, endDate } = req.body;
+  const errorResponse = {
+    message: "Sorry, this spot is already booked for the specified dates",
+    errors: {},
+  };
+
+  const bookingData = await Booking.findAll({
+    where: { spotId },
+    include: [{ model: Spot, attributes: ["id", "ownerId"] }],
+  });
+  const newBooking = await Booking.create({
+    spotId: spotId,
+    userId: user.id,
+    startDate: startDate,
+    endDate: endDate,
+  });
+
+  let userStartDate = moment(newBooking.startDate, moment.ISO_8601);
+  let userEndDate = moment(newBooking.endDate, moment.ISO_8601);
+
+  if (userStartDate > userEndDate)
+    return res.status(404).json({
+      message: "Bad Request",
+      errors: {
+        endDate: "endDate cannot be on or before startDate",
+      },
+    });
+
+  for (let key in bookingData) {
+    let currObj = bookingData[key].toJSON();
+    let currStartDate = currObj.startDate;
+    let currEndDate = currObj.endDate;
+
+    if (user.id !== currObj.Spot["ownerId"])
+      return res.status(403).json({ message: "Forbidden" });
+
+    if (Date(currStartDate) === userStartDate) {
+      errorResponse.errors["startDate"] =
+        "Start date conflicts with an existing booking";
+    }
+
+    if (Date(currEndDate) === userEndDate) {
+      errorResponse.errors["endDate"] =
+        "End date conflicts with an existing booking";
+    }
+
+    if (Object.values(errorResponse.errors).length) {
+      return res.status(403).json(errorResponse);
+    }
+  }
+
+  // newBooking.startDate = moment(newBooking.startDate).format("MMMM Do YYYY");
+  // newBooking.endDate = moment(newBooking.endDate).format("MMMM Do YYYY");
+  return res.status(200).json(newBooking);
+});
 router.post(
   "/:spotId/reviews",
   requireAuth,
