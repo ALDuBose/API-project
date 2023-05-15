@@ -77,7 +77,6 @@ const validateReview = [
   check("review")
     .exists({ checkFalsy: true })
     .withMessage("Review text is required"),
-
   check("stars")
     .exists({ checkFalsy: true })
     .isInt({ min: 1, max: 5 })

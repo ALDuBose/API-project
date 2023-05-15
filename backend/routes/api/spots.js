@@ -243,7 +243,11 @@ router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
   // newBooking.endDate = moment(newBooking.endDate).format("MMMM Do YYYY");
   return res.status(200).json(newBooking);
 });
-router.post("/:spotId/reviews", requireAuth, validateReview, async (req, res, next) => {
+router.post(
+  "/:spotId/reviews",
+  requireAuth,
+  validateReview,
+  async (req, res, next) => {
     const { spotId } = req.params;
     const { user } = req;
     const { review, stars } = req.body;
