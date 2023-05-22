@@ -27,17 +27,9 @@ module.exports = {
         },
         startDate: {
           type: Sequelize.DATE,
-          // get: function() { // or use get(){ }
-          //   return this.getDataValue('startDate')
-          //     .toLocaleString('en-GB', { timeZone: 'UTC' });
-          // }
         },
         endDate: {
           type: Sequelize.DATE,
-          // get: function() { // or use get(){ }
-          //   return this.getDataValue('endDate')
-          //     .toLocaleString('en-GB', { timeZone: 'UTC' });
-          // }
         },
         createdAt: {
           allowNull: false,
