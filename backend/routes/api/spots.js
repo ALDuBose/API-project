@@ -243,6 +243,7 @@ router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
   // newBooking.endDate = moment(newBooking.endDate).format("MMMM Do YYYY");
   return res.status(200).json(newBooking);
 });
+
 router.post(
   "/:spotId/reviews",
   requireAuth,
@@ -251,8 +252,9 @@ router.post(
     const { spotId } = req.params;
     const { user } = req;
     const { review, stars } = req.body;
+    const reviewArr = [];
 
-    const spotData = await Spot.findAll({
+    let spotData = await Spot.findAll({
       where: { id: spotId },
       include: [{ model: Review }],
     });
@@ -260,21 +262,29 @@ router.post(
     if (!spotData.length) {
       return res.status(404).json({ message: "Spot couldn't be found" });
     }
-    if (spotData.Reviews) {
-      if (spotData.Reviews.includes(user.id))
-        return res.status(403).json({
-          message: "User already has a review for this spot",
-        });
-    }
-
     const newReview = await Review.create({
       userId: user.id,
       spotId,
       review,
       stars,
     });
+
     if (typeof newReview.review !== "string")
       return res.status(400).json({ review: "Review text is required" });
+
+    spotData.forEach((el) => {
+      if (!el.Reviews) return res.status(200).json(newReview);
+      else {
+        el.Reviews.forEach((review) => {
+          reviewArr.push(review.userId);
+        });
+        if (reviewArr.includes(user.id)) {
+          return res.status(403).json({
+            message: "User already has a review for this spot",
+          });
+        }
+      }
+    });
 
     return res.status(200).json(newReview);
   }
