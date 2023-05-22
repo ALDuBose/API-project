@@ -1,6 +1,5 @@
 const express = require("express");
 
-const { requireAuth } = require("../../utils/auth");
 const {
   Booking,
   Review,
@@ -11,10 +10,7 @@ const {
   sequelize,
 } = require("../../db/models");
 
-const {
-  handleValidationErrors,
-  requireAuth,
-} = require("../../utils/validation");
+const { requireAuth } = require("../../utils/auth");
 
 const router = express.Router();
 
@@ -22,11 +18,12 @@ router.get("/current", requireAuth, async (req, res, next) => {
   const { user } = req;
   let resultBooking = [];
 
-  const bookingData = await Booking.findAll({
+  const bookingData = await Booking.unscoped().findAll({
     where: { userId: user.id },
   });
 
   const spotData = await Spot.findAll({
+    attributes: { exclude: ["description", "createdAt", "updatedAt"]},
     where: { ownerId: user.id },
     include: { model: SpotImage },
   });

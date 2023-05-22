@@ -1,5 +1,4 @@
 const express = require("express");
-
 const { requireAuth } = require("../../utils/auth");
 const {
   User,
@@ -10,11 +9,8 @@ const {
   ReviewImage,
   sequelize,
 } = require("../../db/models");
-
 const { validateSpot, validateReview } = require("../../utils/validation");
-
 const moment = require("moment");
-
 const router = express.Router();
 
 router.get("/current", requireAuth, async (req, res, next) => {
@@ -46,6 +42,43 @@ router.get("/current", requireAuth, async (req, res, next) => {
   }
 
   return res.status(200).json(updatedSpotData);
+});
+
+router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
+  const { spotId } = req.params;
+  const { user } = req;
+
+  let spotData = await Spot.unscoped().findOne({
+    where: { id: spotId },
+    include: [{ model: Booking.unscoped() }, { model: User }],
+  });
+  // last step is to resolve issue with the dates being invalid
+  console.log(spotData.Bookings.startDate);
+  console.log(spotData.Bookings.endDate);
+
+  if (!spotData)
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+    });
+  if (!spotData.Bookings.length)
+    return res.status(404).json({
+      message: "Booking couldn't be found",
+    });
+
+  spotData = spotData.toJSON();
+  delete spotData.User.username;
+  delete spotData.Bookings.id;
+  delete spotData.Bookings.userId;
+
+  let Bookings = [];
+
+  if (spotData.ownerId === user.id) {
+    Bookings.push(...spotData.Bookings, { User: spotData.User });
+    return res.status(200).json({ Bookings });
+  } else {
+    Bookings.push(spotData.Bookings);
+    res.status(200).json({ Bookings });
+  }
 });
 
 router.get("/:spotId", async (req, res, next) => {
