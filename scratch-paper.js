@@ -14,61 +14,23 @@
 // npx sequelize-cli seed:generate --name review-data
 // npx sequelize-cli seed:generate --name review-image-data
 
-
 {
     "Bookings": [
         {
-            "id": 6,
-            "spotId": 6,
-            "userId": 6,
-            "startDate": "2025-02-19T00:00:00.000Z",
-            "endDate": "2025-02-20T00:00:00.000Z"
-        },
-        {
-            "Spot": {
+            "User": {
                 "id": 6,
-                "ownerId": 6,
-                "address": "123 McCouty Rd ",
-                "city": "McCity",
-                "state": "McState",
-                "country": "McCountry",
-                "name": "McTrip",
-                "description": "TEST -Edit a Spot",
-                "lat": 37.7645358,
-                "lng": -122.4730327,
-                "price": 20,
-                "previewImage": [
-                    {
-                        "id": 6,
-                        "spotId": 6,
-                        "url": "TEST -McImage url",
-                        "preview": true
-                    },
-                    {
-                        "id": 7,
-                        "spotId": 6,
-                        "url": "TEST -McImage url",
-                        "preview": true
-                    }
-                ]
+                "firstName": "Camilla",
+                "lastName": "The Chicken"
             }
         },
-        "There are no bookings at this time",
-        {
-            "Spot": {
-                "id": 7,
-                "ownerId": 6,
-                "address": "123 McCouty Rd",
-                "city": "McCity",
-                "state": "McState",
-                "country": "McCountry",
-                "name": "McTrip",
-                "description": "You deserve a break today",
-                "lat": 37.7645358,
-                "lng": -122.4730327,
-                "price": 20,
-                "previewImage": []
+        [
+            {
+                "id": 6,
+                "spotId": 6,
+                "userId": 6,
+                "startDate": "2025-02-19T00:00:00.000Z",
+                "endDate": "2025-02-20T00:00:00.000Z"
             }
-        }
+        ]
     ]
 }
