@@ -52,9 +52,6 @@ router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
     where: { id: spotId },
     include: [{ model: Booking.unscoped() }, { model: User }],
   });
-  // last step is to resolve issue with the dates being invalid
-  console.log(spotData.Bookings.startDate);
-  console.log(spotData.Bookings.endDate);
 
   if (!spotData)
     return res.status(404).json({
@@ -66,6 +63,15 @@ router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
     });
 
   spotData = spotData.toJSON();
+  spotData.Bookings[0].startDate = moment(spotData.Bookings.startDate).format(
+    "MMMM Do YYYY"
+  );
+  spotData.Bookings[0].endDate = moment(spotData.Bookings.endDate).format(
+    "MMMM Do YYYY"
+  );
+  spotData.Bookings[0].createdAt= moment(spotData.Bookings.createdAt).format("MMMM Do YYYY");
+  spotData.Bookings[0].updatedAt= moment(spotData.Bookings.updatedAt).format("MMMM Do YYYY");
+  console.log(spotData.Bookings);
   delete spotData.User.username;
   delete spotData.Bookings.id;
   delete spotData.Bookings.userId;
@@ -231,7 +237,8 @@ router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
     where: { spotId },
     include: [{ model: Spot, attributes: ["id", "ownerId"] }],
   });
-  const newBooking = await Booking.create({
+
+  let newBooking = await Booking.create({
     spotId: spotId,
     userId: user.id,
     startDate: startDate,
@@ -240,7 +247,7 @@ router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
 
   let userStartDate = moment(newBooking.startDate, moment.ISO_8601);
   let userEndDate = moment(newBooking.endDate, moment.ISO_8601);
-
+console.log(userStartDate, userEndDate)
   if (userStartDate > userEndDate)
     return res.status(404).json({
       message: "Bad Request",
@@ -272,8 +279,11 @@ router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
     }
   }
 
+  //Not getting the format to take on this route
+  // console.log(newBooking)
   // newBooking.startDate = moment(newBooking.startDate).format("MMMM Do YYYY");
   // newBooking.endDate = moment(newBooking.endDate).format("MMMM Do YYYY");
+  // console.log(newBooking)
   return res.status(200).json(newBooking);
 });
 
