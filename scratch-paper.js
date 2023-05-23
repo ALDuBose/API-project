@@ -14,23 +14,3 @@
 // npx sequelize-cli seed:generate --name review-data
 // npx sequelize-cli seed:generate --name review-image-data
 
-{
-    "Bookings": [
-        {
-            "User": {
-                "id": 6,
-                "firstName": "Camilla",
-                "lastName": "The Chicken"
-            }
-        },
-        [
-            {
-                "id": 6,
-                "spotId": 6,
-                "userId": 6,
-                "startDate": "2025-02-19T00:00:00.000Z",
-                "endDate": "2025-02-20T00:00:00.000Z"
-            }
-        ]
-    ]
-}
