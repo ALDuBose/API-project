@@ -69,8 +69,12 @@ router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
   spotData.Bookings[0].endDate = moment(spotData.Bookings.endDate).format(
     "MMMM Do YYYY"
   );
-  spotData.Bookings[0].createdAt= moment(spotData.Bookings.createdAt).format("MMMM Do YYYY");
-  spotData.Bookings[0].updatedAt= moment(spotData.Bookings.updatedAt).format("MMMM Do YYYY");
+  spotData.Bookings[0].createdAt = moment(spotData.Bookings.createdAt).format(
+    "MMMM Do YYYY"
+  );
+  spotData.Bookings[0].updatedAt = moment(spotData.Bookings.updatedAt).format(
+    "MMMM Do YYYY"
+  );
   console.log(spotData.Bookings);
   delete spotData.User.username;
   delete spotData.Bookings.id;
@@ -247,7 +251,7 @@ router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
 
   let userStartDate = moment(newBooking.startDate, moment.ISO_8601);
   let userEndDate = moment(newBooking.endDate, moment.ISO_8601);
-console.log(userStartDate, userEndDate)
+  console.log(userStartDate, userEndDate);
   if (userStartDate > userEndDate)
     return res.status(404).json({
       message: "Bad Request",
@@ -284,6 +288,7 @@ console.log(userStartDate, userEndDate)
   // newBooking.startDate = moment(newBooking.startDate).format("MMMM Do YYYY");
   // newBooking.endDate = moment(newBooking.endDate).format("MMMM Do YYYY");
   // console.log(newBooking)
+
   return res.status(200).json(newBooking);
 });
 

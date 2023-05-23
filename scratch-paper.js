@@ -14,3 +14,17 @@
 // npx sequelize-cli seed:generate --name review-data
 // npx sequelize-cli seed:generate --name review-image-data
 
+// new Date('2021-05-16').toLocaleString('uk');
+// // 16.05.2021, 03:00:00
+
+// new Date('2021-05-16').toLocaleString('en', {
+//   month: 'long',
+// });
+// // May
+
+// new Date('2021-05-16').toLocaleString('en', {
+//   month: 'long',
+//   day: 'numeric',
+//   year: 'numeric',
+// });
+// // May 16, 2021
